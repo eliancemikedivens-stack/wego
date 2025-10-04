@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>WeGo — Annonces</title>
+<link rel="icon" href="data:," />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Poppins:wght@600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f6f9fc;
+    --card:#ffffff;
+    --blue-600:#0b74d1;
+    --blue-500:#1583e0;
+    --soft:#eaf5ff;
+    --muted:#6b7280;
+    --glass: rgba(255,255,255,0.6);
+    --shadow: 0 8px 24px rgba(11,20,40,0.06);
+    --radius:14px;
+    --accent:#0b74d1;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;
+    background:
+      linear-gradient(180deg, #f7fbff 0%, var(--bg) 40%),
+      radial-gradient(800px 300px at 10% 10%, rgba(11,116,209,0.04), transparent 30%);
+    color:#0f1724;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+  }
+
+  /* header */
+  header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding:18px 22px;
+    max-width:1200px;
+    margin:0 auto 8px;
+  }
+  .left{display:flex;align-items:center;gap:12px}
+  .logo{
+    display:flex;flex-direction:column;justify-content:center;align-items:flex-start;
+  }
+  .logo .brand{
+    font-family:Poppins, Inter; font-weight:600; color:var(--blue-600); font-size:20px;
+  }
+  .logo .sub{font-size:12px;color:var(--muted);margin-top:2px}
+
+  .menu-btn{
+    width:48px;height:48px;border-radius:12px;background:linear-gradient(180deg,var(--card),#f7fbff);
+    display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow);cursor:pointer;border:1px solid rgba(11,116,209,0.06);
+  }
+
+  .search{
+    flex:1;max-width:640px;margin:0 14px;
+  }
+  .search input{
+    width:100%;padding:12px 14px;border-radius:12px;border:none;background:linear-gradient(180deg,#fff,#fbfeff);
+    box-shadow:0 6px 18px rgba(11,116,209,0.04);font-size:14px;
+  }
+
+  .actions{display:flex;gap:10px;align-items:center}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;border:none;font-weight:600;cursor:pointer;
+    box-shadow:0 8px 18px rgba(11,20,40,0.04);
+  }
+  .btn-primary{background:linear-gradient(180deg,var(--blue-600),var(--blue-500));color:#fff}
+  .btn-ghost{background:transparent;border:1px solid rgba(15,23,42,0.06);color:var(--muted)}
+
+  /* layout */
+  main{max-width:1200px;margin:12px auto;padding:0 20px 80px;display:grid;grid-template-columns:1fr 360px;gap:20px}
+  .feed{display:flex;flex-direction:column;gap:16px}
+  .card{
+    background:var(--card);border-radius:var(--radius);padding:14px;border:1px solid rgba(15,23,42,0.03);box-shadow:var(--shadow);
+  }
+
+  /* post style */
+  .post{
+    display:flex;gap:14px;align-items:flex-start;
+  }
+  .thumb{
+    width:120px;height:100px;border-radius:10px;background:linear-gradient(180deg,var(--soft),#fff);flex-shrink:0;overflow:hidden;
+    display:flex;align-items:center;justify-content:center;color:var(--blue-600);font-weight:700;border:1px solid rgba(11,116,209,0.05)
+  }
+  .post-body{flex:1}
+  .vendor-row{display:flex;align-items:center;gap:10px;justify-content:space-between}
+  .vendor-info{display:flex;align-items:center;gap:10px}
+  .avatar{
+    width:52px;height:52px;border-radius:12px;background:linear-gradient(135deg,var(--soft),#fff);display:flex;align-items:center;justify-content:center;color:var(--blue-600);font-weight:700
+  }
+  .vname{font-weight:700}
+  .vmeta{font-size:13px;color:var(--muted)}
+  .title{font-size:15px;font-weight:600;margin:8px 0}
+  .desc{font-size:13px;color:var(--muted);line-height:1.4}
+
+  .post-footer{display:flex;align-items:center;justify-content:space-between;margin-top:12px}
+  .controls{display:flex;gap:8px;align-items:center}
+  .icon{
+    display:inline-flex;align-items:center;gap:8px;padding:8px;border-radius:10px;background:#f6fbff;border:1px solid rgba(11,116,209,0.06);cursor:pointer;font-weight:600;
+  }
+  .sub-btn{padding:8px 10px;border-radius:10px;border:1px solid var(--blue-600);background:#fff;color:var(--blue-600);cursor:pointer;font-weight:700}
+
+  /* sidebar */
+  aside{display:flex;flex-direction:column;gap:12px}
+  .sidebar .card{padding:14px}
+  .stat{display:flex;gap:12px;align-items:center;justify-content:space-between}
+  .small{font-size:13px;color:var(--muted)}
+
+  footer{text-align:center;color:var(--muted);margin-top:16px;padding-bottom:40px}
+
+  /* responsive */
+  @media(max-width:980px){
+    main{grid-template-columns:1fr; padding-bottom:120px}
+    .thumb{width:100px;height:84px}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="left">
+    <div class="menu-btn" id="menuBtn">☰</div>
+    <div class="logo">
+      <div class="brand">WeGo</div>
+      <div class="sub">Publicité locale simplifiée</div>
+    </div>
+  </div>
+
+  <div class="search">
+    <input id="searchInput" placeholder="Rechercher produit, compte ou ville..." />
+  </div>
+
+  <div class="actions">
+    <button class="btn btn-ghost" id="publishBtn">Publier</button>
+    <button class="btn btn-primary" id="authBtn">Se connecter</button>
+  </div>
+</header>
+
+<main>
+  <section class="feed" id="feed">
+    <!-- posts injected ici -->
+  </section>
+
+  <aside class="sidebar">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div style="font-weight:700">Filtrer</div>
+          <div class="small">Catégorie · Département · Langue</div>
+        </div>
+        <div class="small">🔔 <span id="notifCount">0</span></div>
+      </div>
+
+      <div style="margin-top:12px;display:flex;flex-direction:column;gap:8px">
+        <select id="filterCategory" style="padding:10px;border-radius:10px;border:1px solid rgba(11,116,209,0.06)">
+          <option value="">Toutes catégories</option>
+          <option>Cosmétiques</option>
+          <option>Matériaux et meubles</option>
+          <option>Utilitaires</option>
+          <option>Autres</option>
+        </select>
+        <select id="filterDept" style="padding:10px;border-radius:10px;border:1px solid rgba(11,116,209,0.06)">
+          <option value="">Tous départements</option>
+          <option>Artibonite</option><option>Centre</option><option>Grand'Anse</option><option>Nippes</option>
+          <option>Nord</option><option>Nord-Est</option><option>Nord-Ouest</option><option>Ouest</option><option>Sud</option><option>Sud-Est</option>
+        </select>
+        <button class="btn btn-primary" id="applyFilter">Appliquer</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div><strong>Paramètres rapides</strong><div class="small">Langue · Notifications · Confidentialité</div></div>
+        <div style="font-size:24px;color:var(--accent)">⚙️</div>
+      </div>
+      <div style="margin-top:12px" class="small">Historique des cœurs effacé après 10 jours.</div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div><strong>À propos</strong><div class="small">WeGo · Version web</div></div>
+      </div>
+      <div style="margin-top:10px" class="small">Designed for clarity. Contact: support@wego.local</div>
+    </div>
+  </aside>
+</main>
+
+<footer>© <span id="year"></span> WeGo — Tous droits réservés</footer>
+
+<!-- minimal modal root -->
+<div id="modalRoot"></div>
+
+<!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* ======= REMPLACE par ton projet Supabase ======= */
+const SUPABASE_URL = "https://REPLACE_WITH_YOUR_PROJECT.supabase.co";
+const SUPABASE_ANON_KEY = "REPLACE_WITH_YOUR_ANON_KEY";
+/* ================================================ */
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+let state = { user: null };
+
+function el(html){ const d=document.createElement('div'); d.innerHTML=html.trim(); return d.firstChild; }
+function fmtCount(n){
+  if(n==null) n=0;
+  if(n<1000) return String(n);
+  if(n<1_000_000) return +(n/1000).toFixed(n%1000===0?0:1)+'k';
+  return +(n/1_000_000).toFixed(1)+'M';
+}
+
+/* auth */
+async function checkSession(){
+  const { data } = await supabase.auth.getSession();
+  state.user = data?.session?.user ?? null;
+  updateAuthUI();
+}
+function updateAuthUI(){
+  const b = document.getElementById('authBtn');
+  b.textContent = state.user ? (state.user.email || 'Compte') : 'Se connecter';
+}
+
+/* modal util */
+function showModal(html){
+  const root = document.getElementById('modalRoot');
+  root.innerHTML = '';
+  const box = document.createElement('div');
+  box.className = 'card';
+  box.style.position='fixed';
+  box.style.left='16px';
+  box.style.right='16px';
+  box.style.top='80px';
+  box.style.maxWidth='760px';
+  box.style.margin='0 auto';
+  box.style.zIndex=9999;
+  box.innerHTML = html;
+  const close = document.createElement('button');
+  close.textContent='Fermer';
+  close.className='btn btn-ghost';
+  close.style.float='right';
+  close.onclick = ()=> root.innerHTML = '';
+  box.appendChild(close);
+  root.appendChild(box);
+}
+
+/* auth button */
+document.getElementById('authBtn').onclick = ()=> {
+  if(state.user){
+    supabase.auth.signOut().then(()=>{ state.user=null; updateAuthUI(); loadFeed(); });
+    return;
+  }
+  showModal(`
+    <h3>Connexion / Inscription</h3>
+    <div style="display:flex;gap:8px;margin-top:12px">
+      <input id="authEmail" placeholder="Email" style="flex:1;padding:10px;border-radius:8px;border:1px solid rgba(15,23,42,0.04)"/>
+      <input id="authPass" placeholder="Clé d'accès (min 8)" type="password" style="width:220px;padding:10px;border-radius:8px;border:1px solid rgba(15,23,42,0.04)"/>
+    </div>
+    <div style="margin-top:10px;display:flex;gap:8px">
+      <button id="signin" class="btn btn-primary">Se connecter</button>
+      <button id="signup" class="btn btn-ghost">S'inscrire</button>
+    </div>
+  `);
+  setTimeout(()=>{
+    document.getElementById('signin').onclick = async ()=>{
+      const email = document.getElementById('authEmail').value.trim();
+      const pass = document.getElementById('authPass').value;
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password: pass });
+      if(error) return alert(error.message);
+      state.user = data.user;
+      updateAuthUI();
+      document.getElementById('modalRoot').innerHTML='';
+      loadFeed();
+    };
+    document.getElementById('signup').onclick = async ()=>{
+      const email = document.getElementById('authEmail').value.trim();
+      const pass = document.getElementById('authPass').value;
+      if(pass.length < 8) return alert('La clé d\'accès doit comporter au moins 8 caractères.');
+      const { data, error } = await supabase.auth.signUp({ email, password: pass });
+      if(error) return alert(error.message);
+      alert('Compte créé. Vérifie ton email pour confirmer.');
+      document.getElementById('modalRoot').innerHTML='';
+    };
+  },50);
+};
+
+/* publish modal with file input */
+document.getElementById('publishBtn').onclick = async ()=>{
+  if(!state.user) return alert('Connecte-toi d\'abord.');
+  showModal(`
+    <h3>Nouvelle publication</h3>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-top:12px">
+      <select id="pubCategory" style="padding:10px;border-radius:8px">
+        <option>Cosmétiques</option><option>Matériaux et meubles</option><option>Utilitaires</option><option>Autres</option>
+      </select>
+      <select id="pubDept" style="padding:10px;border-radius:8px">
+        <option>Ouest</option><option>Artibonite</option><option>Centre</option><option>Nippes</option><option>Grand'Anse</option>
+        <option>Nord</option><option>Nord-Est</option><option>Nord-Ouest</option><option>Sud</option><option>Sud-Est</option>
+      </select>
+      <input id="pubCity" placeholder="Ville" style="padding:10px;border-radius:8px"/>
+      <input id="pubSection" placeholder="Section / Rue" style="padding:10px;border-radius:8px"/>
+      <input id="pubPhone" placeholder="Numéro (+509...)" value="+509" style="padding:10px;border-radius:8px"/>
+      <input id="pubTitle" placeholder="Titre de la publication" style="padding:10px;border-radius:8px"/>
+      <textarea id="pubDesc" placeholder="Description (optionnel)" style="padding:10px;border-radius:8px"></textarea>
+
+      <!-- file input -->
+      <label style="font-size:13px;color:var(--muted)">Image (optionnel, max 5MB)</label>
+      <input id="pubFile" type="file" accept="image/*" />
+      <div id="pubImagePreview" style="margin-top:8px"></div>
+
+      <div style="display:flex;gap:8px"><button id="doPublish" class="btn btn-primary">Publier</button></div>
+    </div>
+  `);
+
+  setTimeout(()=>{
+    // preview handler
+    const fileInput = document.getElementById('pubFile');
+    fileInput.addEventListener('change', (e)=>{
+      const f = e.target.files?.[0];
+      const p = document.getElementById('pubImagePreview');
+      p.innerHTML = '';
+      if(!f) return;
+      const img = document.createElement('img');
+      img.src = URL.createObjectURL(f);
+      img.style.maxWidth = '220px';
+      img.style.maxHeight = '160px';
+      img.onload = ()=> URL.revokeObjectURL(img.src);
+      p.appendChild(img);
+    });
+
+    document.getElementById('doPublish').onclick = async ()=>{
+      // upload file if choix
+      const file = document.getElementById('pubFile').files?.[0] ?? null;
+      let imageUrl = '';
+      if(file){
+        const btn = document.getElementById('doPublish');
+        const orig = btn.textContent;
+        btn.textContent = 'Téléversement…';
+        btn.disabled = true;
+        imageUrl = await uploadImageFile(file);
+        btn.textContent = orig;
+        btn.disabled = false;
+        if(!imageUrl) return; // erreur upload
+      }
+
+      const vendor = await getOrCreateVendorForUser();
+      if(!vendor) return alert('Crée d\'abord un compte vendeur.');
+
+      const rec = {
+        vendor_id: vendor.id,
+        title: document.getElementById('pubTitle').value.trim(),
+        category: document.getElementById('pubCategory').value,
+        department: document.getElementById('pubDept').value,
+        city: document.getElementById('pubCity').value.trim(),
+        section_street: document.getElementById('pubSection').value.trim(),
+        phone: document.getElementById('pubPhone').value.trim(),
+        description: document.getElementById('pubDesc').value.trim(),
+        image_url: imageUrl || null
+      };
+      const required = ['title','category','department','city','section_street','phone'];
+      for(const k of required){ if(!rec[k]) return alert('Tous les champs obligatoires doivent être remplis.'); }
+      const { data, error } = await supabase.from('posts').insert(rec).select().single();
+      if(error){ alert(error.message); return; }
+      document.getElementById('modalRoot').innerHTML='';
+      loadFeed();
+    };
+  },60);
+};
+
+/* vendor helper */
+async function getOrCreateVendorForUser(){
+  const { data: userData } = await supabase.auth.getUser();
+  const user = userData.user;
+  if(!user) return null;
+  let { data, error } = await supabase.from('vendors').select('*').eq('owner', user.id).limit(1).maybeSingle();
+  if(error) return null;
+  if(data) return data;
+  const name = prompt('Nom de ton compte (company/person) :');
+  if(!name) return null;
+  const { data: ins, error: e2 } = await supabase.from('vendors').insert({ owner: user.id, name }).select().single();
+  if(e2) return null;
+  return ins;
+}
+
+/* upload helpers */
+function sanitizeFilename(name){ return name.replace(/[^\w.-]/g, '_'); }
+async function uploadImageFile(file){
+  if(!file) return null;
+  const maxBytes = 5 * 1024 * 1024;
+  if(file.size > maxBytes){ alert('Image trop grande. Max 5MB.'); return null; }
+  const allowed = ['image/jpeg','image/png','image/webp','image/gif'];
+  if(!allowed.includes(file.type)){ alert('Type de fichier non supporté.'); return null; }
+  const { data: userData } = await supabase.auth.getUser();
+  const user = userData.user;
+  if(!user){ alert('Connecte-toi pour téléverser une image.'); return null; }
+  const folder = 'produits';
+  const filename = `${Date.now()}_${user.id}_${sanitizeFilename(file.name)}`;
+  const path = `${folder}/${filename}`;
+  try{
+    const { data, error: upError } = await supabase.storage
+      .from('wego-images')
+      .upload(path, file, { cacheControl: '3600', upsert: false });
+    if(upError){ console.error('Upload error', upError); alert('Erreur lors du téléversement.'); return null; }
+    const { data: publicData } = supabase.storage.from('wego-images').getPublicUrl(path);
+    const publicUrl = publicData?.publicUrl ?? null;
+    return publicUrl;
+  } catch(e){ console.error(e); alert('Erreur inattendue.'); return null; }
+}
+
+/* feed */
+async function loadFeed(q=''){
+  const feed = document.getElementById('feed');
+  feed.innerHTML = '<div class="card small">Chargement…</div>';
+  let builder = supabase.from('posts').select('*, vendors(name, stars_total, crosses_total)').order('created_at',{ascending:false}).limit(50);
+  const cat = document.getElementById('filterCategory')?.value;
+  const dept = document.getElementById('filterDept')?.value;
+  if(q) builder = builder.ilike('title', `%${q}%`);
+  if(cat) builder = builder.eq('category', cat);
+  if(dept) builder = builder.eq('department', dept);
+  const { data, error } = await builder;
+  if(error){ feed.innerHTML = '<div class="card">Erreur : '+error.message+'</div>'; return; }
+  feed.innerHTML = '';
+  for(const p of data || []){
+    const card = document.createElement('div'); card.className='card';
+    card.innerHTML = `
+      <div class="post">
+        <div class="thumb">${p.image_url ? `<img src="${p.image_url}" style="width:100%;height:100%;object-fit:cover">` : (p.title||'').slice(0,2).toUpperCase()}</div>
+        <div class="post-body">
+          <div class="vendor-row">
+            <div class="vendor-info">
+              <div class="avatar">${(p.vendors?.name||'C').slice(0,2).toUpperCase()}</div>
+              <div>
+                <div class="vname">${p.vendors?.name || 'Compte'}</div>
+                <div class="vmeta">⭐ ${p.vendors?.stars_total||0} · ✖ ${p.vendors?.crosses_total||0}</div>
+              </div>
+            </div>
+            <div class="small">${new Date(p.created_at).toLocaleDateString()}</div>
+          </div>
+
+          <div class="title">${p.title}</div>
+          <div class="desc">${p.description || ''}</div>
+
+          <div class="post-footer">
+            <div class="controls">
+              <button class="icon" data-action="heart" data-id="${p.id}">💙 <span id="hc_${p.id}">${fmtCount(p.hearts_count||0)}</span></button>
+              <button class="icon" data-action="call" data-phone="${p.phone}">📞</button>
+              <button class="sub-btn" data-action="sub" data-vendor="${p.vendors?.id||''}">S'abonner</button>
+            </div>
+            <div class="small">${p.department} · ${p.city}</div>
+          </div>
+        </div>
+      </div>
+    `;
+    feed.appendChild(card);
+    card.querySelectorAll('[data-action]').forEach(btn=>{
+      btn.onclick = async ()=>{
+        const a = btn.getAttribute('data-action');
+        if(a==='heart') { await toggleHeart(btn.getAttribute('data-id')); }
+        if(a==='sub') { await toggleSub(btn.getAttribute('data-vendor')); }
+        if(a==='call') { window.open('tel:'+btn.getAttribute('data-phone')); }
+        loadFeed(document.getElementById('searchInput').value.trim());
+      };
+    });
+  }
+}
+
+/* heart toggle */
+async function toggleHeart(postId){
+  const { data: userData } = await supabase.auth.getUser();
+  const user = userData.user;
+  if(!user) return alert('Connecte-toi.');
+  const { data: exist } = await supabase.from('hearts').select('*').eq('user_id', user.id).eq('post_id', postId).maybeSingle();
+  if(exist){ await supabase.from('hearts').delete().eq('id', exist.id); }
+  else { await supabase.from('hearts').insert({ user_id: user.id, post_id: postId }); }
+}
+
+/* subscriptions */
+async function toggleSub(vendorId){
+  const { data: userData } = await supabase.auth.getUser();
+  const user = userData.user;
+  if(!user) return alert('Connecte-toi.');
+  const { data: exist } = await supabase.from('subscriptions').select('*').eq('user_id', user.id).eq('vendor_id', vendorId).maybeSingle();
+  if(exist){ await supabase.from('subscriptions').delete().eq('id', exist.id); alert('Désabonné.'); }
+  else { await supabase.from('subscriptions').insert({ user_id: user.id, vendor_id: vendorId }); alert('Abonné.'); }
+}
+
+/* filters & events */
+document.getElementById('applyFilter').onclick = ()=> loadFeed(document.getElementById('searchInput').value.trim());
+document.getElementById('searchInput').oninput = (e)=> loadFeed(e.target.value);
+
+/* init */
+document.getElementById('year').textContent = new Date().getFullYear();
+checkSession().then(()=> loadFeed());
+</script>
+</body>
+</html>
